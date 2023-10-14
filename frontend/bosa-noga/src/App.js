@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch } from 'react-redux'
 import { fetchProducts } from './store/itemsReducer'
 import { fetchTopSales } from './store/topSalesReducer'
+import { fetchCatalog } from "./store/catalogReducer";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { HomepageLoaded } from "./pages/HomepageLoaded";
@@ -13,7 +14,8 @@ import { NotFound } from "./pages/NotFound";
 import { Cart } from "./pages/Cart";
 
 import "./App.css";
-import { fetchCatalog } from "./store/catalogReducer";
+import { Product } from "./pages/Product";
+
 
 
 function App() {
@@ -36,6 +38,8 @@ function App() {
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/catalog/:id" element={<Product />} />
         </Routes>
         <Footer />
       </Router>

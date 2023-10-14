@@ -1,11 +1,21 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { fetchIndividualProduct } from '../store/buyReducer'
 
 
 
 export const TopSales = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const topSales = useSelector(state => state.topSales.topSales);
   const topSalesStatus = useSelector(state => state.topSales.status);
+
+  const handleClick = (item) => {
+    dispatch(fetchIndividualProduct(item.id));
+    navigate(`/catalog/${item.id}`);
+}
 
   if (topSalesStatus !== null) {
     return (
@@ -17,7 +27,9 @@ export const TopSales = () => {
               <div className="card-body">
                 <p className="card-text">{item.title}</p>
                 <p className="card-text">{item.price}</p>
-                <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
+                <button 
+                onClick={() => handleClick(item)} 
+                className="btn btn-outline-primary">Заказать</button>
               </div>
             </div>
           </div>

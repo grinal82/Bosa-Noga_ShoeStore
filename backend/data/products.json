@@ -23,7 +23,7 @@
             },
             {
                 "size": "15 US",
-                "available": false
+                "available": true
             }
         ]
     },
@@ -50,7 +50,7 @@
             },
             {
                 "size": "16 US",
-                "available": false
+                "available": true
             }
         ]
     },
@@ -72,7 +72,7 @@
         "sizes": [
             {
                 "size": "14 US",
-                "available": true
+                "available": false
             },
             {
                 "size": "18 US",
@@ -103,7 +103,7 @@
             },
             {
                 "size": "18 US",
-                "available": false
+                "available": true
             }
         ]
     },
@@ -130,7 +130,7 @@
             },
             {
                 "size": "18 US",
-                "available": false
+                "available": true
             }
         ]
     },
@@ -260,7 +260,7 @@
         "sizes": [
             {
                 "size": "12 US",
-                "available": true
+                "available": false
             },
             {
                 "size": "16 US",
@@ -318,7 +318,7 @@
             },
             {
                 "size": "16 US",
-                "available": false
+                "available": true
             }
         ]
     },

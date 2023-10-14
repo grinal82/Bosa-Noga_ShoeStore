@@ -23,6 +23,14 @@ export const fetchMoreProducts = createAsyncThunk('products/fetchMoreProducts', 
     return data;
 })
 
+export const fetchFilteredProducts = createAsyncThunk('products/fetchFilteredProducts', async (filter) => {
+    const response = await fetch(`http://localhost:7070/api/items?q=${filter}`);
+
+    const data = await response.json();
+
+    return data;
+})
+
 const itemsSlice = createSlice({
     name: "products",
     initialState: {
@@ -31,7 +39,8 @@ const itemsSlice = createSlice({
         error: null,
         offset: 0, // for loading more items
         selectedCategory: null,
-    }, 
+        filter:'',
+    },
     reducers: {
         clearItems: (state) => {
             state.items = [];
@@ -44,7 +53,12 @@ const itemsSlice = createSlice({
         }, 
         clearStatus: (state) => {
             state.status = null;
-        }
+        },
+        filterItems: (state, action) => ({
+            // добавляем в фильтр строковые данные прилетевшие из поля ввода услуги
+            ...state,
+            filter: action.payload
+        })
     },
     extraReducers: {
         [fetchProducts.pending]: (state, action) => {
@@ -70,11 +84,22 @@ const itemsSlice = createSlice({
         },
         [fetchMoreProducts.rejected]: (state, action) => {
             state.error = action.error.message
+        }, 
+        [fetchFilteredProducts.pending]: (state, action) => {
+            // state.status = 'loading';
+            state.error = null;
+        }, 
+        [fetchFilteredProducts.fulfilled]: (state, action) => {
+            state.status = 'success';
+            state.items = action.payload;
+        },
+        [fetchFilteredProducts.rejected]: (state, action) => {
+            state.error = action.error.message
         }
         
     }
 })
 
-export const { clearItems, clearOffset, clearStatus, setCategory } = itemsSlice.actions
+export const { clearItems, clearOffset, clearStatus, setCategory, filterItems } = itemsSlice.actions
 
 export default itemsSlice.reducer;

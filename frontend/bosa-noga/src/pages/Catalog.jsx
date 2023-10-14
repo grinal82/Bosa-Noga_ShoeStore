@@ -1,6 +1,35 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Category } from '../components/Category'
+import { CatalogItems } from '../components/CatalogItems'
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchFilteredProducts, clearStatus, clearItems } from '../store/itemsReducer'
+
 
 export const Catalog = () => {
+  const dispatch = useDispatch()
+  const [hasMoreItems, setHasMoreItems] = useState(true);
+  const filter = useSelector(state=>state.products.filter)
+  const [content, setContent] = useState(filter)
+  useEffect(() => {
+    dispatch(fetchFilteredProducts(filter))
+  }, [dispatch, filter])
+  const items = useSelector(state => state.products.items);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    dispatch(fetchFilteredProducts(content))
+    dispatch(clearStatus())
+    dispatch(clearItems())
+    setContent('')
+  }
+
+  useEffect(() => {
+    if (items.length < 6) {
+      setHasMoreItems(false);
+    }
+  }, [items.length]);
+
   return (
     <main className="container">
       <div className="row">
@@ -11,96 +40,26 @@ export const Catalog = () => {
           </div>
           <section className="catalog">
             <h2 className="text-center">Каталог</h2>
-            <form className="catalog-search-form form-inline">
-              <input name='search' className="form-control" placeholder="Поиск"/>
+            <form className="catalog-search-form form-inline"
+            onSubmit={handleSearchSubmit}>
+              <input 
+              name='search' 
+              className="form-control" 
+              placeholder="Поиск"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}/>
             </form>
-            <ul className="catalog-categories nav justify-content-center">
-              <li className="nav-item">
-                <a className="nav-link active" href="#">Все</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Женская обувь</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Мужская обувь</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Обувь унисекс</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">Детская обувь</a>
-              </li>
-            </ul>
-            <div className="row">
-              <div className="col-4">
-                <div className="card catalog-item-card">
-                  <img src={require("../img/products/sandals_myer.jpg")}
-                    className="card-img-top img-fluid" alt="Босоножки 'MYER'"/>
-                  <div className="card-body">
-                    <p className="card-text">Босоножки 'MYER'</p>
-                    <p className="card-text">34 000 руб.</p>
-                    <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-4">
-                <div className="card catalog-item-card">
-                  <img src={require("../img/products/sandals_keira.jpg")}
-                    className="card-img-top img-fluid" alt="Босоножки 'Keira'"/>
-                  <div className="card-body">
-                    <p className="card-text">Босоножки 'Keira'</p>
-                    <p className="card-text">7 600 руб.</p>
-                    <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-4">
-                <div className="card catalog-item-card">
-                  <img src={require("../img/products/superhero_sneakers.jpg")}
-                    className="card-img-top img-fluid" alt="Супергеройские кеды"/>
-                  <div className="card-body">
-                    <p className="card-text">Супергеройские кеды</p>
-                    <p className="card-text">1 400 руб.</p>
-                    <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-4">
-                <div className="card catalog-item-card">
-                  <img src={require("../img/products/sandals_myer.jpg")}
-                    className="card-img-top img-fluid" alt="Босоножки 'MYER'"/>
-                  <div className="card-body">
-                    <p className="card-text">Босоножки 'MYER'</p>
-                    <p className="card-text">34 000 руб.</p>
-                    <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-4">
-                <div className="card catalog-item-card">
-                  <img src={require("../img/products/sandals_keira.jpg")}
-                    className="card-img-top img-fluid" alt="Босоножки 'Keira'"/>
-                  <div className="card-body">
-                    <p className="card-text">Босоножки 'Keira'</p>
-                    <p className="card-text">7 600 руб.</p>
-                    <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-4">
-                <div className="card catalog-item-card">
-                  <img src={require("../img/products/superhero_sneakers.jpg")}
-                    className="card-img-top img-fluid" alt="Супергеройские кеды"/>
-                  <div className="card-body">
-                    <p className="card-text">Супергеройские кеды</p>
-                    <p className="card-text">1 400 руб.</p>
-                    <a href="/products/1.html" className="btn btn-outline-primary">Заказать</a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Category/>
+            <CatalogItems/>
             <div className="text-center">
-              <button className="btn btn-outline-primary">Загрузить ещё</button>
+            {hasMoreItems && (
+                  <button 
+                  className="btn btn-outline-primary"
+                  // onClick={handleLoadMore}
+                  >
+                    Загрузить ещё
+                  </button>
+                )}
             </div>
           </section>
         </div>
