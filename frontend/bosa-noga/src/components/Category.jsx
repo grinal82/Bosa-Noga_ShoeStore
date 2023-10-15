@@ -5,8 +5,6 @@ import { clearFilter, fetchProducts, clearItems, clearOffset, setCategory, clear
 
 
 export const Category = ({content, filter, setHasMoreItems}) => {
-  console.log(content);
-  console.log(filter);
   const catalog = useSelector(state => state.catalog.catalog);
   const dispatch = useDispatch();
   const offset = useSelector(state => state.products.offset);
@@ -33,7 +31,7 @@ export const Category = ({content, filter, setHasMoreItems}) => {
     }
     console.log('offset in the state: ', offset);
     console.log('items in the state: ', items);
-  }, [dispatch, content, filter, offset, items]);
+  }, [setHasMoreItems, dispatch, content, filter, offset, items]);
 
   return (
     <ul className="catalog-categories nav justify-content-center">

@@ -12,9 +12,9 @@ import { Catalog } from "./pages/Catalog";
 import { Contacts } from "./pages/Contacts";
 import { NotFound } from "./pages/NotFound";
 import { Cart } from "./pages/Cart";
-
-import "./App.css";
 import { Product } from "./pages/Product";
+import "./App.css";
+
 
 
 
