@@ -11,6 +11,8 @@ export const HomepageLoaded = () => {
   const category = useSelector((state) => state.products.selectedCategory);
   const offset = useSelector((state) => state.products.offset);
   const dispatch = useDispatch();
+  const filter = useSelector((state) => state.products.filter);
+  const error = useSelector((state)=> state.products.error)
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMoreItems, setHasMoreItems] = useState(true);
@@ -34,6 +36,7 @@ export const HomepageLoaded = () => {
   }
 
   return (
+
     <main className="container">
       <div className="row">
         <div className="col">
@@ -42,27 +45,27 @@ export const HomepageLoaded = () => {
             <h2 className="banner-header">К весне готовы!</h2>
           </div>
           <section className="top-sales">
-            <h2 className="text-center">Хиты продаж!</h2>
-              <TopSales/>
+
+            {error===null ?(<><h2 className="text-center">Хиты продаж!</h2><TopSales /></>):(<div className="alert alert-danger">{error}</div>)}
+
           </section>
           <section className="catalog">
-              <h2 className="text-center">Каталог</h2>
-              <Category/>
-              <CatalogItems/>
-              <div className="text-center">
-                {hasMoreItems && (
-                  <button 
+            {error===null ?(<><h2 className="text-center">Каталог</h2><Category setHasMoreItems={setHasMoreItems} filter={filter} /><CatalogItems /><div className="text-center">
+              {hasMoreItems && (
+                <button
                   className="btn btn-outline-primary"
                   onClick={handleLoadMore}
-                  >
-                    Загрузить ещё
-                  </button>
-                )}
-              </div>
+                >
+                  Загрузить ещё
+                </button>
+              )}
+            </div></>):(<div className="alert alert-danger">{error}</div>)}
+              
           </section>
         </div>
       </div>
     </main>
+
   )
 }
 

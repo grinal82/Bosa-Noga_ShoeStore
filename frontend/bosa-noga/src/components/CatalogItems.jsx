@@ -1,12 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { fetchIndividualProduct } from '../store/buyReducer';
-import { useDispatch } from 'react-redux';
 
 export const CatalogItems = () => {
     const items = useSelector(state => state.products.items);
     const status = useSelector(state => state.products.status);
+    const error = useSelector((state)=> state.products.error)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ export const CatalogItems = () => {
             </div>
           </div>
         </div>
-      ))) : (
+      ))) : error!==null ?(<div className="alert alert-danger">{error}</div>):(
         <div className="preloader">
           <span></span>
           <span></span>

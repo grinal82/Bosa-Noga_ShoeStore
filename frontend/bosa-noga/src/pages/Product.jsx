@@ -1,12 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import { useState } from 'react'
-import { addQuantity } from '../store/buyReducer'
-import { reduceQuantity } from '../store/buyReducer'
-import { addSelectedSize } from '../store/buyReducer'
-import { removeSelectedInfo } from '../store/buyReducer'
+import { useSelector, useDispatch } from 'react-redux'
+import { addQuantity, reduceQuantity, addSelectedSize, removeSelectedInfo } from '../store/buyReducer'
+
 
 
 export const Product = () => {

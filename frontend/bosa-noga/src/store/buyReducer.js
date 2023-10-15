@@ -54,6 +54,7 @@ const buySlice = createSlice({
         [fetchIndividualProduct.fulfilled]: (state, action) => {
             state.status = 'success';
             state.item = action.payload;
+            state.error = null
         },
         [fetchIndividualProduct.rejected]: (state, action) => {
             state.error = action.error.message

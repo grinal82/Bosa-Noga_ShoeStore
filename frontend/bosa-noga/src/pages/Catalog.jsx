@@ -1,34 +1,56 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchFilteredProducts, clearStatus, clearItems, fetchMoreProducts, clearOffset, fetchProducts } from '../store/itemsReducer'
 import { Category } from '../components/Category'
 import { CatalogItems } from '../components/CatalogItems'
-import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchFilteredProducts, clearStatus, clearItems } from '../store/itemsReducer'
+
+
 
 
 export const Catalog = () => {
   const dispatch = useDispatch()
   const [hasMoreItems, setHasMoreItems] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const filter = useSelector(state=>state.products.filter)
+  const categoryID = useSelector(state=>state.products.selectedCategory)
   const [content, setContent] = useState(filter)
+  const offset = useSelector((state) => state.products.offset);
+  const status = useSelector((state) => state.products.status);
+  const error = useSelector((state)=> state.products.error)
+
   useEffect(() => {
-    dispatch(fetchFilteredProducts(filter))
-  }, [dispatch, filter])
+    if(content === '') {
+      dispatch(fetchProducts(categoryID));
+      // setContent(null)
+    }
+    dispatch(fetchFilteredProducts({categoryID, filter:content}))
+  }, [dispatch, filter, content, categoryID])
   const items = useSelector(state => state.products.items);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault()
-    dispatch(fetchFilteredProducts(content))
+    dispatch(fetchFilteredProducts({categoryID, filter:content}))
     dispatch(clearStatus())
     dispatch(clearItems())
-    setContent('')
+    // setContent('')
   }
-
-  useEffect(() => {
-    if (items.length < 6) {
-      setHasMoreItems(false);
+  const handleLoadMore = () => {
+    if(!isLoadingMore){
+      setIsLoadingMore(true);
+      console.log('Offset before dispatch:', offset);
+      dispatch(fetchMoreProducts({categoryID, offset}));
+      setIsLoadingMore(false)
+      console.log('statue: ', status);
+      console.log('Длинна массива', items.length);
+      console.log('Текущий оффсет: ', offset);
+      console.log('сравнение длинны и оффсета: ',items.length >= offset + 6);
+      if (status ==='success' && (offset-items.length)>6) {
+        dispatch(clearOffset());
+        setHasMoreItems(false);
+        
+      }
     }
-  }, [items.length]);
+  }
 
   return (
     <main className="container">
@@ -49,18 +71,17 @@ export const Catalog = () => {
               value={content}
               onChange={(e) => setContent(e.target.value)}/>
             </form>
-            <Category/>
-            <CatalogItems/>
-            <div className="text-center">
-            {hasMoreItems && (
-                  <button 
+            { error=== null ? (<><Category setHasMoreItems={setHasMoreItems} content={content} /><CatalogItems /><div className="text-center">
+              {hasMoreItems && (
+                <button
                   className="btn btn-outline-primary"
-                  // onClick={handleLoadMore}
-                  >
-                    Загрузить ещё
-                  </button>
-                )}
-            </div>
+                  onClick={handleLoadMore}
+                >
+                  Загрузить ещё
+                </button>
+              )}
+            </div></>):(<div className="alert alert-danger">{error}</div>)}
+            
           </section>
         </div>
       </div>

@@ -1,10 +1,7 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { useState } from 'react'
-import { Link, NavLink} from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { filterItems } from '../store/itemsReducer'
+import React, {useState} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Link, NavLink, useNavigate} from 'react-router-dom'
+import { clearOffset, filterItems } from '../store/itemsReducer'
 import { clearStatus, clearItems } from '../store/itemsReducer'
 
 
@@ -23,6 +20,7 @@ export const Header = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault()
+    dispatch(clearOffset())
     dispatch(filterItems(content))
     dispatch(clearStatus())
     dispatch(clearItems())

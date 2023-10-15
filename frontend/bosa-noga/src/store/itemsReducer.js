@@ -23,8 +23,13 @@ export const fetchMoreProducts = createAsyncThunk('products/fetchMoreProducts', 
     return data;
 })
 
-export const fetchFilteredProducts = createAsyncThunk('products/fetchFilteredProducts', async (filter) => {
-    const response = await fetch(`http://localhost:7070/api/items?q=${filter}`);
+export const fetchFilteredProducts = createAsyncThunk('products/fetchFilteredProducts', async ({categoryID, filter}) => {
+
+    const apiUrl = categoryID
+    ? `http://localhost:7070/api/items?categoryId=${categoryID}&q=${filter}`
+    : `http://localhost:7070/api/items?q=${filter}`
+
+    const response = await fetch(apiUrl);
 
     const data = await response.json();
 
@@ -51,6 +56,9 @@ const itemsSlice = createSlice({
         setCategory: (state, action) => {
             state.selectedCategory = action.payload
         }, 
+        clearCategory: (state) => {
+            state.selectedCategory = null
+        },
         clearStatus: (state) => {
             state.status = null;
         },
@@ -58,7 +66,10 @@ const itemsSlice = createSlice({
             // добавляем в фильтр строковые данные прилетевшие из поля ввода услуги
             ...state,
             filter: action.payload
-        })
+        }),
+        clearFilter: (state) => {
+            state.filter = '';
+        }
     },
     extraReducers: {
         [fetchProducts.pending]: (state, action) => {
@@ -69,6 +80,7 @@ const itemsSlice = createSlice({
             state.status = 'success';
             state.items = action.payload;
             state.offset = state.offset + 6;
+            state.error = null;
         },
         [fetchProducts.rejected]: (state, action) => {
             state.error = action.error.message
@@ -81,6 +93,7 @@ const itemsSlice = createSlice({
             state.status = 'success';
             state.items = state.items.concat(action.payload);
             state.offset = state.offset + 6;
+            state.error = null
         },
         [fetchMoreProducts.rejected]: (state, action) => {
             state.error = action.error.message
@@ -92,6 +105,8 @@ const itemsSlice = createSlice({
         [fetchFilteredProducts.fulfilled]: (state, action) => {
             state.status = 'success';
             state.items = action.payload;
+            state.offset = state.offset + 6;
+            state.error = null;
         },
         [fetchFilteredProducts.rejected]: (state, action) => {
             state.error = action.error.message
@@ -100,6 +115,6 @@ const itemsSlice = createSlice({
     }
 })
 
-export const { clearItems, clearOffset, clearStatus, setCategory, filterItems } = itemsSlice.actions
+export const { clearItems, clearOffset, clearStatus, setCategory, clearCategory, filterItems, clearFilter } = itemsSlice.actions
 
 export default itemsSlice.reducer;
