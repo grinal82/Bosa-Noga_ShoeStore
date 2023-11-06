@@ -14,25 +14,33 @@ const catalogSlice = createSlice({
         catalog: [],
         status: null,
         error: null,
+        selectedItem: null,
     }, 
     reducers: {
-        
+        addSelectedItem: (state, action) => {
+            state.selectedItem = action.payload
+        }, 
+        clearSelectedItem: (state) => {
+            state.selectedItem = null
+        }
     }, 
     extraReducers: {
         [fetchCatalog.pending]: (state, action) => {
-            // state.status = 'loading';
+            state.status = 'loading';
             state.error = null;
         },
         [fetchCatalog.fulfilled]: (state, action) => {
+            state.error = null;
             state.status = 'success';
             state.catalog = action.payload;
         },
         [fetchCatalog.rejected]: (state, action) => {
+            state.status = null
             state.error = action.error.message
         },
     }
 })
 
-export const { } = catalogSlice.actions;
+export const { addSelectedItem, clearSelectedItem } = catalogSlice.actions;
 
 export default catalogSlice.reducer;

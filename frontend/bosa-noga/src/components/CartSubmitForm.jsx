@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { clearCart } from '../store/buyReducer'
 import { useDispatch } from 'react-redux'
+import { clearSelectedItem } from '../store/catalogReducer'
 
 export const CartSubmitForm = ({ cartItems, setCartItems, setLoading, setOrderSuccess, orderSuccess, loading, setError }) => {
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ export const CartSubmitForm = ({ cartItems, setCartItems, setLoading, setOrderSu
 
     setLoading(false); // Hide the loader
     dispatch(clearCart()); // Clear the cart
+    dispatch(clearSelectedItem()); // Clear the selected item state
     };
 
     return (

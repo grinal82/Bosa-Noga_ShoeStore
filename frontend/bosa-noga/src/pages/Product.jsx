@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { addQuantity, reduceQuantity, addSelectedSize, removeSelectedInfo } from '../store/buyReducer'
+import { addQuantity, reduceQuantity, addSelectedSize, removeSelectedInfo, fetchIndividualProduct } from '../store/buyReducer'
 
 
 
@@ -11,6 +11,8 @@ export const Product = () => {
   const item = useSelector(state => state.buy.item)
   const quantity = useSelector(state => state.buy.quantity)
   const size = useSelector(state => state.buy.sizeToBuy)
+  const error = useSelector(state => state.buy.error)
+  const selectedItem = useSelector(state=>state.catalog.selectedItem)
   const [selectedSize, setSelectedSize] = useState(null)
 
 
@@ -136,13 +138,14 @@ const addToCart = (item, size, quantity) => {
                         </div>
                     </div>
                     </>
-                    ):(
-                        <div className="preloader">
+                    ):( error ? (
+                        <><div className="alert alert-danger">{error}</div><button className="btn btn-primary" onClick={() => dispatch(fetchIndividualProduct(selectedItem.id))}>Try again</button></>
+                    ) : (<div className="preloader">
                             <span></span>
                             <span></span>
                             <span></span>
                             <span></span>
-                        </div>
+                        </div>)
                     )}
                 </section>
             </div>

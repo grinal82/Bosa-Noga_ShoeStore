@@ -20,7 +20,7 @@ const topSalesSlice = createSlice({
     }, 
     extraReducers: {
         [fetchTopSales.pending]: (state, action) => {
-            // state.status = 'loading';
+            state.status = 'loading';
             state.error = null;
         },
         [fetchTopSales.fulfilled]: (state, action) => {

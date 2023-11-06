@@ -83,23 +83,26 @@ const itemsSlice = createSlice({
             state.error = null;
         },
         [fetchProducts.rejected]: (state, action) => {
+            state.status = null;
             state.error = action.error.message
         },
         [fetchMoreProducts.pending]: (state, action) => {
-            // state.status = 'loading';
             state.error = null;
+            state.status = 'loading';
         },
         [fetchMoreProducts.fulfilled]: (state, action) => {
+            state.error = null
             state.status = 'success';
             state.items = state.items.concat(action.payload);
             state.offset = state.offset + 6;
-            state.error = null
         },
         [fetchMoreProducts.rejected]: (state, action) => {
+            state.status = null
             state.error = action.error.message
+            state.offset = 0
         }, 
         [fetchFilteredProducts.pending]: (state, action) => {
-            // state.status = 'loading';
+            state.status = 'loading';
             state.error = null;
         }, 
         [fetchFilteredProducts.fulfilled]: (state, action) => {
@@ -109,6 +112,7 @@ const itemsSlice = createSlice({
             state.error = null;
         },
         [fetchFilteredProducts.rejected]: (state, action) => {
+            state.status = null;
             state.error = action.error.message
         }
         

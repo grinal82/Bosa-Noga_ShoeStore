@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchFilteredProducts, clearStatus, clearItems, fetchMoreProducts, clearOffset, fetchProducts } from '../store/itemsReducer'
+import { 
+  fetchFilteredProducts, 
+  clearStatus, 
+  clearItems, 
+  fetchMoreProducts, 
+  clearOffset, 
+  fetchProducts 
+} from '../store/itemsReducer'
 import { Category } from '../components/Category'
 import { CatalogItems } from '../components/CatalogItems'
 
@@ -25,6 +32,7 @@ export const Catalog = () => {
     }
     dispatch(fetchFilteredProducts({categoryID, filter:content}))
   }, [dispatch, filter, content, categoryID])
+
   const items = useSelector(state => state.products.items);
 
   const handleSearchSubmit = (e) => {
@@ -44,7 +52,7 @@ export const Catalog = () => {
       console.log('Длинна массива', items.length);
       console.log('Текущий оффсет: ', offset);
       console.log('сравнение длинны и оффсета: ',items.length >= offset + 6);
-      if (status ==='success' && (offset-items.length)>6) {
+      if (status ==='success' && (offset-items.length)>6 && items.length) {
         dispatch(clearOffset());
         setHasMoreItems(false);
         
@@ -57,34 +65,59 @@ export const Catalog = () => {
       <div className="row">
         <div className="col">
           <div className="banner">
-            <img src={require("../img/banner.jpg")} className="img-fluid" alt="К весне готовы!"/>
+            <img
+              src={require("../img/banner.jpg")}
+              className="img-fluid"
+              alt="К весне готовы!"
+            />
             <h2 className="banner-header">К весне готовы!</h2>
           </div>
           <section className="catalog">
             <h2 className="text-center">Каталог</h2>
-            <form className="catalog-search-form form-inline"
-            onSubmit={handleSearchSubmit}>
-              <input 
-              name='search' 
-              className="form-control" 
-              placeholder="Поиск"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}/>
+            <form
+              className="catalog-search-form form-inline"
+              onSubmit={handleSearchSubmit}
+            >
+              <input
+                name="search"
+                className="form-control"
+                placeholder="Поиск"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
             </form>
-            { error=== null ? (<><Category setHasMoreItems={setHasMoreItems} content={content} /><CatalogItems /><div className="text-center">
-              {hasMoreItems && (
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={handleLoadMore}
-                >
-                  Загрузить ещё
-                </button>
-              )}
-            </div></>):(<div className="alert alert-danger">{error}</div>)}
-            
+            {status === 'loading' ? (
+              <div className="preloader">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            ) : error === null ? (
+              <>
+                <Category setHasMoreItems={setHasMoreItems} content={content} />
+                <CatalogItems />
+                <div className="text-center">
+                  {hasMoreItems && items.length > 0 && (
+                    <button
+                      className="btn btn-outline-primary"
+                      onClick={handleLoadMore}
+                    >
+                      Загрузить ещё
+                    </button>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="alert alert-danger">{error}</div>
+                <button 
+                  onClick={() => dispatch(fetchProducts())} className='btn btn-primary'>Try again</button>
+              </>
+            )}
           </section>
         </div>
       </div>
     </main>
-  )
+  );
 }

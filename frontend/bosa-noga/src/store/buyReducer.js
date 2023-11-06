@@ -18,6 +18,7 @@ const buySlice = createSlice({
         quantity: 1,
         sizeToBuy:null,
         cart: null,
+        error: null,
     },
 
     reducers: {
@@ -44,6 +45,10 @@ const buySlice = createSlice({
         },
         clearCart: (state, action) => {
             state.cart=null
+        },
+
+        clearItem: (state) => {
+            state.item = null
         }
     },
     extraReducers: {
@@ -62,6 +67,6 @@ const buySlice = createSlice({
     }
 })
 
-export const { addQuantity, reduceQuantity, addSelectedSize, removeSelectedInfo, addToCart, clearCart } = buySlice.actions;
+export const { addQuantity, reduceQuantity, addSelectedSize, removeSelectedInfo, addToCart, clearCart, clearItem } = buySlice.actions;
 
 export default buySlice.reducer;
