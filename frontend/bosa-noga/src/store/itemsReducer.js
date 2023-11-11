@@ -10,10 +10,10 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async (c
     return data;
 })
 
-export const fetchMoreProducts = createAsyncThunk('products/fetchMoreProducts', async ({category,offset}) => {
-    console.log(category)
-    const apiUrl = category
-    ?  `http://localhost:7070/api/items?categoryId=${category}&offset=${offset}` 
+export const fetchMoreProducts = createAsyncThunk('products/fetchMoreProducts', async ({categoryID,offset}) => {
+    console.log('categoryID in fetchMoreProducts request',categoryID)
+    const apiUrl = categoryID
+    ?  `http://localhost:7070/api/items?categoryId=${categoryID}&offset=${offset}` 
     : `http://localhost:7070/api/items?offset=${offset}`;
 
     const response = await fetch(apiUrl);

@@ -30,8 +30,8 @@ const fortune = (ctx, body = null, status = 200) => {
     setTimeout(() => {
       // Uncomment for error generation
       if (Math.random() > 0.8) {
-          reject(new Error('Something bad happened'));
-          return;
+        reject(new Error("Something bad happened"));
+        return;
       }
 
       ctx.response.status = status;
@@ -54,11 +54,11 @@ app.use(async (ctx, next) => {
   console.log(`Received ${ctx.method} request at ${ctx.url}`);
 
   // Log request headers
-  console.log('Request Headers:', ctx.request.headers);
+  console.log("Request Headers:", ctx.request.headers);
 
   // Log request body (if it's a POST or PUT request)
-  if (['POST', 'PUT'].includes(ctx.method)) {
-    console.log('Request Body:', ctx.request.body);
+  if (["POST", "PUT"].includes(ctx.method)) {
+    console.log("Request Body:", ctx.request.body);
   }
 
   // Continue with the next middleware
@@ -69,7 +69,7 @@ app.use(async (ctx, next) => {
 
   // Log response body (if it exists)
   if (ctx.body) {
-    console.log('Response Body:', ctx.body);
+    console.log("Response Body:", ctx.body);
   }
 });
 

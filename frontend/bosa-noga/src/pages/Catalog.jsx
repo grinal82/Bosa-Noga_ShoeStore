@@ -27,11 +27,12 @@ export const Catalog = () => {
 
   useEffect(() => {
     if(content === '') {
-      dispatch(fetchProducts(categoryID));
-      // setContent(null)
-    }
-    dispatch(fetchFilteredProducts({categoryID, filter:content}))
-  }, [dispatch, filter, content, categoryID])
+      dispatch(fetchProducts());
+      console.log('content: ', content);
+      console.log('categoryID: ', categoryID);
+    } else {
+    dispatch(fetchFilteredProducts({categoryID, filter:content}))}
+  }, [])
 
   const items = useSelector(state => state.products.items);
 
@@ -45,6 +46,7 @@ export const Catalog = () => {
   const handleLoadMore = () => {
     if(!isLoadingMore){
       setIsLoadingMore(true);
+      console.log('categoryID before dispatch:', categoryID )
       console.log('Offset before dispatch:', offset);
       dispatch(fetchMoreProducts({categoryID, offset}));
       setIsLoadingMore(false)
@@ -86,19 +88,20 @@ export const Catalog = () => {
                 onChange={(e) => setContent(e.target.value)}
               />
             </form>
-            {status === 'loading' ? (
-              <div className="preloader">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            ) : error === null ? (
+            {error === null ? (
               <>
                 <Category setHasMoreItems={setHasMoreItems} content={content} />
                 <CatalogItems />
+                
                 <div className="text-center">
-                  {hasMoreItems && items.length > 0 && (
+                  {status === 'loading' ? (
+                    <div className="preloader">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                    ): hasMoreItems && items.length > 0 && (
                     <button
                       className="btn btn-outline-primary"
                       onClick={handleLoadMore}

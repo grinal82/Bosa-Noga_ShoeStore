@@ -38,13 +38,7 @@ export const CatalogItems = () => {
             </div>
           </div>
         </div>
-      ))) : error!==null ?(<div className="alert alert-danger">{error}</div>):(
-        <div className="preloader">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+      ))) : error!==null ?(<div className="alert alert-danger">{error}</div>):(null
       )}
     </div>
     )
